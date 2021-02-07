@@ -36,6 +36,9 @@ public class UserOrderForm {
     @NotBlank
     private String newAddress;
 
+    @NotBlank
+    private String movingDate;
+
     @Numeric
     @NotBlank
     private String box;
@@ -111,6 +114,10 @@ public class UserOrderForm {
         this.newAddress = newAddress;
     }
 
+    public String getMovingDate() { return movingDate ;}
+
+    public void setMovingDate(String MovingDate){this.movingDate = MovingDate;}
+
     public String getBox() {
         return box;
     }
@@ -150,4 +157,6 @@ public class UserOrderForm {
     public void setWashingMachineInstallation(boolean washingMachineInstallation) {
         this.washingMachineInstallation = washingMachineInstallation;
     }
+
+
 }
