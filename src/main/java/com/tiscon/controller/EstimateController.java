@@ -146,6 +146,7 @@ public class EstimateController {
      * @param model         遷移先に連携するデータ
      * @return 遷移先
      */
+    boolean check = true;
     @PostMapping(value = "order", params = "complete")
     String complete(@Validated UserOrderForm userOrderForm, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -156,12 +157,17 @@ public class EstimateController {
         }
 
 
-
-        UserOrderDto dto = new UserOrderDto();
-        BeanUtils.copyProperties(userOrderForm, dto);
-        estimateService.registerOrder(dto);
-
-        return "complete";
+        if(check==true) {
+            UserOrderDto dto = new UserOrderDto();
+            BeanUtils.copyProperties(userOrderForm, dto);
+            estimateService.registerOrder(dto);
+            return "complete";
+        }else{
+            UserOrderDto dto = new UserOrderDto();
+            BeanUtils.copyProperties(userOrderForm, dto);
+            estimateService.registerOrder(dto);
+            return "complete_miss";
+        }
     }
 
 }
