@@ -64,6 +64,13 @@ public class EstimateService {
         estimateDAO.batchInsertCustomerPackage(packageList);
     }
 
+    public boolean checkDuplication(UserOrderDto dto) {
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(dto, customer);
+
+        return estimateDAO.existsCustomer(customer);
+    }
+
     /**
      * 見積もり依頼に応じた概算見積もりを行う。
      *

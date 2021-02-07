@@ -172,5 +172,21 @@ public class EstimateDao {
         return parameterJdbcTemplate.queryForObject(sql, paramSource, Integer.class);
     }
 
+    public boolean existsCustomer(Customer customer) {
+        String mysql = "SELECT COUNT(*) FROM CUSTOMER WHERE OLD_PREFECTURE_ID = :oldPrefectureId "
+                + "AND NEW_PREFECTURE_ID = :newPrefectureId AND CUSTOMER_NAME = :customerName AND TEL = :tel "
+                + "AND EMAIL = :email and OLD_ADDRESS = :oldAddress AND NEW_ADDRESS = :newAddress "
+                + "AND MOVING_DATE = :movingDate";
+
+        int resultNum = parameterJdbcTemplate.queryForObject(mysql, new BeanPropertySqlParameterSource(customer), Integer.class);
+        System.out.println(resultNum);
+        return resultNum != 0;
+    }
+
+
+
+
+
+
 
 }
