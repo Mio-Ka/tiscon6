@@ -155,23 +155,15 @@ public class EstimateController {
             return "confirm";
         }
 
-
-        if(check==true) {
-            UserOrderDto dto = new UserOrderDto();
-            BeanUtils.copyProperties(userOrderForm, dto);
+        UserOrderDto dto = new UserOrderDto();
+        BeanUtils.copyProperties(userOrderForm, dto);
+        if(!estimateService.checkDuplication(dto)) {
             estimateService.registerOrder(dto);
             return "complete";
         }else{
-            UserOrderDto dto = new UserOrderDto();
-            BeanUtils.copyProperties(userOrderForm, dto);
-            estimateService.registerOrder(dto);
             return "complete_miss";
         }
-        UserOrderDto dto = new UserOrderDto();
-        BeanUtils.copyProperties(userOrderForm, dto);
-        estimateService.registerOrder(dto);
 
-        return "complete";
     }
 
 }
