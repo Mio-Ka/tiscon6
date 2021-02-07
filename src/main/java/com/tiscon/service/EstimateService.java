@@ -104,7 +104,7 @@ public class EstimateService {
             priceForOptionalService = estimateDAO.getPricePerOptionalService(OptionalServiceType.WASHING_MACHINE.getCode());
         }
 
-        return priceForDistance + (int)(pricePerTruck*N) + priceForOptionalService;
+        return (int)((priceForDistance + pricePerTruck)*N) + priceForOptionalService;
     }
     /**
      * 荷物当たりの段ボール数を算出する。
