@@ -8,7 +8,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 引越し見積もり機能においてDBとのやり取りを行うクラス。
@@ -129,10 +131,32 @@ public class EstimateDao {
      * @return 料金[円]
      */
     public int getPricePerTruck(int boxNum) {
-        String sql = "SELECT PRICE FROM TRUCK_CAPACITY WHERE MAX_BOX >= :boxNum ORDER BY PRICE LIMIT 1";
-
+//        String sql = "SELECT PRICE FROM TRUCK_CAPACITY WHERE MAX_BOX >= :boxNum ORDER BY PRICE LIMIT 1";
         SqlParameterSource paramSource = new MapSqlParameterSource("boxNum", boxNum);
-        return parameterJdbcTemplate.queryForObject(sql, paramSource, Integer.class);
+        String mySql = "SELECT MAX_BOX, PRICE FROM TRUCK_CAPACITY ORDER BY MAX_BOX";
+        List<Map<String,Object>> Trucks_data = parameterJdbcTemplate.queryForList(mySql, paramSource);
+
+            int remaining = boxNum;
+            int truck2t = 0;
+            int truck4t = 0;
+            while(remaining != 0) {
+                if (remaining <= (Integer) Trucks_data.get(0).get("MAX_BOX")) {
+                    remaining -= remaining;
+                    truck2t += 1;
+                } else if ((Integer) Trucks_data.get(0).get("MAX_BOX") < remaining && remaining <= (Integer) Trucks_data.get(1).get("MAX_BOX")) {
+                    remaining -= remaining;
+                    truck4t += 1;
+                } else {
+                    remaining -= (Integer) Trucks_data.get(1).get("MAX_BOX");
+                    truck4t += 1;
+                }
+            }
+
+        return (Integer) Trucks_data.get(0).get("Price") * truck2t + (Integer) Trucks_data.get(1).get("Price") * truck4t;
+
+//        System.out.print(parameterJdbcTemplate.queryForList(mySql, paramSource).get(0).get("MAX_BOX"));
+//        System.out.print(((Integer) Trucks_data.get(0).get("MAX_BOX")).getClass());
+//        return parameterJdbcTemplate.queryForObject(sql, paramSource, Integer.class);
     }
 
     /**
